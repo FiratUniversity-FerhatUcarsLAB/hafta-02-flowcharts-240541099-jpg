@@ -1,0 +1,96 @@
+digraph ATM_Flowchart {
+    // --- GRAFİK AYARLARI ---
+    rankdir=TB; // Akış yönü: Yukarıdan Aşağıya (Top to Bottom)
+    splines=ortho; // Çizgileri daha dik açılı yap (daha düzenli görünür)
+    node [shape=box, style="rounded,filled", fontname="Helvetica"];
+    edge [fontname="Helvetica", fontsize=10];
+
+    // --- ANA DÜĞÜMLER ---
+    Start [label="BAŞLA", shape=ellipse, fillcolor=lightblue];
+    End [label="BİTİR\n'İyi günler dileriz'", shape=ellipse, fillcolor=lightcoral];
+    Init [label="Değişkenleri Tanımla\nhesap_bakiye, gunluk_limit, vb."];
+    MainLoop_Check [label="Yeni İşlem Var Mı?\n(devam == 'E')", shape=diamond, fillcolor=khaki];
+
+    // --- AKIŞ BAŞLANGICI ---
+    Start -> Init -> MainLoop_Check;
+
+    // --- 1. BÖLÜM: PIN DOĞRULAMA SÜRECİ ---
+    subgraph cluster_pin_verification {
+        label = "1. PIN Doğrulama Süreci";
+        bgcolor="#f0f0f0"; // Arka plan rengi
+
+        Pin_Init [label="PIN denemesini sıfırla\n(pin_dogru = YANLIŞ)"];
+        PinLoop_Check [label="Deneme Hakkı Var Mı?\nVE\nPIN Doğru Değil Mi?", shape=diamond, fillcolor=khaki];
+        Read_Pin [label="OKU: girilen_pin", shape=parallelogram];
+        Pin_Check [label="girilen_pin == dogru_pin ?", shape=diamond, fillcolor=khaki];
+        Pin_Success [label="PIN Başarılı", fillcolor=lightgreen];
+        Pin_Fail [label="deneme_sayisi++"];
+        Hak_Check [label="kalan_hak > 0 ?", shape=diamond, fillcolor=khaki];
+        Yaz_Kalan_Hak [label="YAZ: 'Hatalı PIN!'", shape=parallelogram, fillcolor=lightyellow];
+        Kart_Bloke [label="YAZ: 'Kartınız bloke edildi'", shape=parallelogram, fillcolor=orange];
+        Pin_Bloke_Check [label="PIN Başarısız Mı?\n(pin_dogru == YANLIŞ)", shape=diamond, fillcolor=khaki];
+        
+        // PIN bölümü iç akışı
+        Pin_Init -> PinLoop_Check;
+        PinLoop_Check -> Read_Pin [label=" Evet"];
+        Read_Pin -> Pin_Check;
+        Pin_Check -> Pin_Success [label=" Evet"];
+        Pin_Success -> PinLoop_Check;
+        Pin_Check -> Pin_Fail [label=" Hayır"];
+        Pin_Fail -> Hak_Check;
+        Hak_Check -> Yaz_Kalan_Hak [label=" Evet"];
+        Yaz_Kalan_Hak -> PinLoop_Check;
+        Hak_Check -> Kart_Bloke [label=" Hayır"];
+        Kart_Bloke -> PinLoop_Check;
+        PinLoop_Check -> Pin_Bloke_Check [label=" Hayır (Döngü Bitti)"];
+    }
+
+    // --- 2. BÖLÜM: PARA ÇEKME İŞLEMİ ---
+    subgraph cluster_withdrawal {
+        label = "2. Para Çekme İşlemi";
+        bgcolor="#e6f2ff";
+
+        Show_Info_Read_Amount [label="YAZ: Bakiye ve Limit\nOKU: cekilecek_tutar", shape=parallelogram];
+        Check_Tutar_20 [label="Tutar 20'nin Katı Değil Mi?", shape=diamond, fillcolor=khaki];
+        Hata_Tutar_20 [label="YAZ: HATA: '20 TL'nin katı olmalı'", shape=parallelogra, fillcolor=lightyellow];
+        Check_Bakiye [label="Bakiye Yetersiz Mi?", shape=diamond, fillcolor=khaki];
+        Hata_Bakiye [label="YAZ: HATA: 'Yetersiz bakiye!'", shape=parallelogram, fillcolor=lightyellow];
+        Check_Limit [label="Günlük Limit Aşıldı Mı?", shape=diamond, fillcolor=khaki];
+        Hata_Limit [label="YAZ: HATA: 'Günlük limit aşımı!'", shape=parallelogram, fillcolor=lightyellow];
+        Islem_Basarili [label="Hesabı Güncelle\nYAZ: 'İşlem Başarılı!'", fillcolor=lightgreen];
+
+        // Para Çekme bölümü iç akışı
+        Show_Info_Read_Amount -> Check_Tutar_20;
+        Check_Tutar_20 -> Hata_Tutar_20 [label=" Evet"];
+        Check_Tutar_20 -> Check_Bakiye [label=" Hayır"];
+        Check_Bakiye -> Hata_Bakiye [label=" Evet"];
+        Check_Bakiye -> Check_Limit [label=" Hayır"];
+        Check_Limit -> Hata_Limit [label=" Evet"];
+        Check_Limit -> Islem_Basarili [label=" Hayır"];
+    }
+
+    // --- 3. BÖLÜM: İŞLEM TEKRARI ---
+    subgraph cluster_continue {
+        label = "3. İşlem Tekrarı";
+        bgcolor="#fff5e6";
+
+        Ask_Continue [label="YAZ: 'Başka işlem? (E/H)'\nOKU: devam", shape=parallelogram];
+    }
+    
+    // --- BÖLÜMLER ARASI BAĞLANTILAR ---
+    MainLoop_Check -> Pin_Init [label=" Evet"];
+    MainLoop_Check -> End [label=" Hayır"];
+    
+    // PIN kontrolünden sonraki akış
+    Pin_Bloke_Check -> End [label=" Evet (Bloke Oldu)"];
+    Pin_Bloke_Check -> Show_Info_Read_Amount [label=" Hayır (Başarılı)"];
+
+    // Para çekme işlemi sonucundan tekrar sorgusuna geçiş
+    Islem_Basarili -> Ask_Continue;
+    Hata_Tutar_20 -> Ask_Continue;
+    Hata_Bakiye -> Ask_Continue;
+    Hata_Limit -> Ask_Continue;
+    
+    // Tekrar sorgusundan ana döngüye dönüş
+    Ask_Continue -> MainLoop_Check;
+}
