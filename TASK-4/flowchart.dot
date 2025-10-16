@@ -1,0 +1,118 @@
+digraph DersKayitSistemi {
+    // Grafik ayarları
+    rankdir=TD;
+    fontname="Helvetica";
+    node [style=rounded, fontname="Helvetica"];
+    edge [fontname="Helvetica"];
+
+    // Renk ve Stil Tanımları
+    node [shape=box];
+    
+    // Düğüm tanımları
+    start [label="Başla", shape=ellipse, style="filled", fillcolor="seagreen", fontcolor="white"];
+    stop [label="Bitir", shape=ellipse, style="filled", fillcolor="seagreen", fontcolor="white"];
+
+    login_prompt [label="Öğrenci No ve Şifre Oku", shape=parallelogram, style=filled, fillcolor=lightyellow];
+    login_check [label="Giriş Bilgileri Doğru mu?", shape=diamond, style=filled, fillcolor=lightyellow];
+    login_fail [label="Hatalı Giriş", shape=note, style=filled, fillcolor=khaki];
+    
+    login_success [label="Giriş Başarılı\nMevcut Dersleri ve GPA'yı Yükle", style=filled, fillcolor=palegreen];
+    gpa_warning [label="GPA < 2.5 ise Danışman Onayı Uyarısı Göster", style=filled, fillcolor=palegreen];
+    
+    main_menu [label="Durumu Göster ve Seçim Oku\n(Ders Listele, Ekle, Çıkar, Kaydı Tamamla)", shape=parallelogram, style=filled, fillcolor=lightyellow];
+    menu_choice [label="Kullanıcı Seçimi", shape=diamond, style=filled, fillcolor=lightyellow];
+    
+    list_courses [label="Tüm Dersleri Listele", style=filled, fillcolor=palegreen];
+    
+    remove_course_prompt [label="Çıkarılacak Ders Kodunu Oku", shape=parallelogram, style=filled, fillcolor=lightyellow];
+    remove_confirm [label="Dersi Silmeyi Onayla", shape=diamond, style=filled, fillcolor=lightyellow];
+    remove_course_process [label="Dersi Çıkar ve Krediyi Güncelle", style=filled, fillcolor=palegreen];
+    
+    finalize_registration [label="Kaydı Tamamla İşlemi", style=filled, fillcolor=palegreen];
+    check_gpa_for_approval [label="GPA < 2.5 mi?", shape=diamond, style=filled, fillcolor=lightyellow];
+    needs_advisor_approval [label="Danışman Onayı Gerekiyor", style=filled, fillcolor=palegreen];
+    registration_complete [label="Kayıt Başarıyla Tamamlandı", style=filled, fillcolor=palegreen];
+    show_summary [label="Son Kayıt Özetini Göster", shape=note, style=filled, fillcolor=khaki];
+    
+    // Ders Ekleme Kontrollerini Gruplama (Daha Düzenli Görünüm için)
+    subgraph cluster_add_course {
+        label = "Ders Ekleme Kontrol Zinciri";
+        style=filled;
+        color=lightgrey;
+        node [shape=diamond, style=filled, fillcolor=lightyellow];
+        
+        add_course_prompt [label="Eklenecek Ders Kodunu Oku", shape=parallelogram];
+        check_course_exists [label="Ders Sistemde Var mı?"];
+        check_quota [label="Kontenjan Dolu mu?"];
+        check_prerequisite [label="Ön Koşul Alınmış mı?"];
+        check_conflict [label="Zaman Çakışması Var mı?"];
+        check_credit_limit [label="Kredi Limiti Aşıldı mı?"];
+        
+        // Hata mesajları için farklı bir stil
+        node [shape=note, style=filled, fillcolor=khaki];
+        error_course_not_found [label="Hata: Ders Bulunamadı"];
+        error_quota_full [label="Hata: Kontenjan Dolu"];
+        error_prerequisite [label="Hata: Ön Koşul Eksik"];
+        error_conflict [label="Hata: Zaman Çakışması"];
+        error_credit_limit [label="Hata: Kredi Limiti Aşıldı"];
+    }
+    
+    add_course_success [label="Dersi Ekle ve Krediyi Güncelle", style=filled, fillcolor=palegreen];
+
+    // Akış Bağlantıları
+    start -> login_prompt;
+    login_prompt -> login_check;
+    login_check -> login_fail [label="Hayır"];
+    login_fail -> stop;
+    login_check -> login_success [label="Evet"];
+    
+    login_success -> gpa_warning -> main_menu;
+    main_menu -> menu_choice;
+    
+    menu_choice -> list_courses [label="1"];
+    list_courses -> main_menu;
+    
+    menu_choice -> add_course_prompt [label="2"];
+    
+    menu_choice -> remove_course_prompt [label="3"];
+    
+    menu_choice -> finalize_registration [label="4"];
+    
+    // Ders Ekleme Akışı
+    add_course_prompt -> check_course_exists;
+    check_course_exists -> check_quota [label="Evet"];
+    check_course_exists -> error_course_not_found [label="Hayır"];
+    error_course_not_found -> main_menu;
+    
+    check_quota -> check_prerequisite [label="Hayır"];
+    check_quota -> error_quota_full [label="Evet"];
+    error_quota_full -> main_menu;
+    
+    check_prerequisite -> check_conflict [label="Evet"];
+    check_prerequisite -> error_prerequisite [label="Hayır"];
+    error_prerequisite -> main_menu;
+    
+    check_conflict -> check_credit_limit [label="Hayır"];
+    check_conflict -> error_conflict [label="Evet"];
+    error_conflict -> main_menu;
+    
+    check_credit_limit -> add_course_success [label="Hayır"];
+    check_credit_limit -> error_credit_limit [label="Evet"];
+    error_credit_limit -> main_menu;
+    
+    add_course_success -> main_menu;
+    
+    // Ders Çıkarma Akışı
+    remove_course_prompt -> remove_confirm;
+    remove_confirm -> remove_course_process [label="Evet"];
+    remove_confirm -> main_menu [label="Hayır"];
+    remove_course_process -> main_menu;
+    
+    // Kayıt Tamamlama Akışı
+    finalize_registration -> check_gpa_for_approval;
+    check_gpa_for_approval -> needs_advisor_approval [label="Evet"];
+    check_gpa_for_approval -> registration_complete [label="Hayır"];
+    needs_advisor_approval -> show_summary;
+    registration_complete -> show_summary;
+    show_summary -> stop;
+}
