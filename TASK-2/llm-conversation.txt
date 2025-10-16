@@ -1,0 +1,518 @@
+Gemini
+
+H
+Gemini ile sohbet
+“E-ticaret sitesinde sepet y¨onetimi ve ¨odeme sistemini adım adım a¸cıkla.
+
+Kullanıcı giri¸si, ¨ur¨un ekleme, stok kontrol¨u, indirim kodu, kargo hesaplama
+
+ve ¨odeme a¸samalarını i¸cermeli.
+
+Hacker
+Özel Gem
+Harika bir başlangıç! Tam da istediğim gibi bir görev. E-ticaret sitesinin algoritmasını birlikte "hack'leyelim" ve en verimli hale getirelim. Senin verdiğin prompt'e dayanarak, sistemin temel adımlarını ve mantık akışını çıkaralım. Bu bizim ilk taslağımız olacak, üzerine eklemeler ve değişiklikler yapmak için tamamen serbestsin.
+
+İşte e-ticaret sepet ve ödeme sisteminin adım adım, detaylı açıklaması:
+
+Sistem Akışı: Online Alışveriş
+1. Başlangıç ve Kullanıcı Doğrulama
+
+BAŞLA: Sistem çalışmaya başlar.
+
+
+Kullanıcı Girişi Kontrolü: Sistem ilk olarak kullanıcının giriş yapıp yapmadığını kontrol eder.
+
+EĞER kullanıcı giriş yapmışsa, alışverişe devam edebilir.
+
+DEĞİLSE, sistem kullanıcıyı giriş/kayıt ol sayfasına yönlendirir. Giriş başarılı olana kadar veya kullanıcı vazgeçene kadar bu işlem beklenir.
+
+2. Ürün Seçimi ve Sepete Ekleme
+
+
+Ürün Gezinme Döngüsü: Kullanıcı, ürün kategorileri arasında gezinmeye başlar. Beğendiği ürünleri seçer. Bu döngü, kullanıcı ödeme adımına geçmeye karar verene kadar devam eder.
+
+Ürün Seçimi: Kullanıcı bir ürünü sepete eklemek için tıklar.
+
+
+Stok Kontrolü: Sistem, seçilen ürünün stokta olup olmadığını anında kontrol eder.
+
+
+EĞER stokta ürün varsa, ürün sepete eklenir.
+
+DEĞİLSE, kullanıcıya "Ürün stokta yok" uyarısı gösterilir ve işlem sonlandırılır.
+
+3. Sepet Yönetimi ve Ödemeye Geçiş
+
+Sepet Görüntüleme ve Düzenleme Döngüsü: Kullanıcı sepetini görüntüler. Bu ekranda ürünleri silebilir, adetlerini artırıp azaltabilir.
+
+
+İndirim Kodu Uygulama: Kullanıcıya bir indirim kodu girme seçeneği sunulur.
+
+EĞER girilen kod geçerliyse, indirim sepet tutarına yansıtılır.
+
+DEĞİLSE, "Geçersiz kupon kodu" uyarısı verilir.
+
+Sepet Tutar Kontrolü: Ödeme adımına geçmeden önce sepetin toplam tutarı kontrol edilir.
+
+
+EĞER sepet tutarı 50 TL'den az ise, kullanıcıya "Minimum sepet tutarı 50 TL olmalıdır" uyarısı gösterilir ve ödemeye geçiş engellenir.
+
+
+Kargo Ücreti Hesaplama: Sepet tutarına göre kargo ücreti hesaplanır.
+
+
+EĞER toplam tutar 200 TL veya üzerindeyse, kargo ücretsiz olarak belirlenir.
+
+DEĞİLSE, standart kargo ücreti toplama eklenir.
+
+4. Ödeme ve Sipariş Onayı
+
+
+Ödeme Yöntemi Seçimi: Kullanıcıya Kredi Kartı, Havale, Kapıda Ödeme gibi seçenekler sunulur ve birini seçmesi istenir.
+
+Bilgi Girişi: Seçilen yönteme göre gerekli bilgiler (kart bilgileri, adres vb.) istenir.
+
+Ödeme İşlemi: Ödeme gerçekleştirilir.
+
+
+EĞER ödeme başarılıysa, sipariş onaylanır. Kullanıcıya bir sipariş özeti gösterilir ve bilgilendirme (E-posta/SMS) gönderilir.
+
+DEĞİLSE, kullanıcıya "Ödeme başarısız oldu" hatası gösterilir ve bir önceki adıma geri dönme seçeneği sunulur.
+
+BİTİR: Sipariş süreci tamamlanır.
+
+Bu ilk taslak hakkında ne düşünüyorsun? Gözüne takılan, "Şurayı şöyle yapsak daha mantıklı olur" dediğin bir nokta var mı? Belki ödeme seçeneklerinde ek bir kontrol (örneğin kapıda ödeme için ek ücret) ekleyebiliriz ya da stok kontrolünü daha farklı bir aşamada yapabiliriz. Senin fikirlerinle bu algoritmayı daha da geliştirelim!
+
+Bu algoritmanın pseudocodeunu oluştur
+
+Hacker
+Özel Gem
+Süper fikir! Hemen o taslağı alıp, bilgisayarların anlayacağı dile daha yakın, ama bizim de okuyabileceğimiz bir "pseudocode" yani sözde koda dönüştürelim. Bu, işin en eğlenceli kısımlarından biri çünkü mantığı satır satır kodluyoruz. 
+
+İşte adım adım, tüm kontrolleri içeren pseudocode'umuz. Hazır mısın?
+
+// --- E-TİCARET SEPET VE ÖDEME SİSTEMİ PSEUDOCODE ---
+
+BAŞLA
+
+    // Adım 1: Kullanıcı Giriş Kontrolü
+    YAZ "Sisteme hoş geldiniz!"
+    EĞER kullaniciGirisYapmisMi == HAYIR İSE [cite: 143]
+        YAZ "Alışverişe devam etmek için lütfen giriş yapın."
+        // (Giriş/Kayıt işlemleri burada gerçekleşir)
+        EĞER girisBasarili == HAYIR İSE
+            YAZ "Giriş yapılamadı. Sistem sonlandırılıyor."
+            BİTİR
+        BİTİR EĞER
+    BİTİR EĞER
+
+    // Adım 2: Ürün Ekleme Döngüsü
+    DÖNGÜ kullaniciAlisveriseDevamEtmekIstiyor == EVET SÜRECE [cite: 144]
+        YAZ "Ürünleri listele / Kategorileri göster."
+        OKU secilenUrun
+        
+        // Stok Kontrolü
+        EĞER urunStoktaVarMi(secilenUrun) == EVET İSE [cite: 146]
+            SepeteEkle(secilenUrun)
+            YAZ secilenUrun + " başarıyla sepete eklendi."
+        DEĞİLSE
+            YAZ "Üzgünüz, seçtiğiniz ürün stokta bulunmuyor."
+        BİTİR EĞER
+
+        YAZ "Başka bir ürün eklemek ister misiniz? (EVET/HAYIR)"
+        OKU devamCevabi
+        EĞER devamCevabi == "HAYIR" İSE
+            kullaniciAlisveriseDevamEtmekIstiyor = HAYIR
+        BİTİR EĞER
+    BİTİR DÖNGÜ
+
+    // Adım 3: Sepet Yönetimi ve Kontroller
+    YAZ "Sepetiniz görüntüleniyor..."
+    // (Sepet içeriği ve ara toplam burada gösterilir)
+
+    YAZ "İndirim kodunuz var mı? (EVET/HAYIR)"
+    OKU indirimCevabi
+    EĞER indirimCevabi == "EVET" İSE [cite: 148]
+        YAZ "Lütfen indirim kodunu girin:"
+        OKU girilenKod
+        EĞER kodGecerliMi(girilenKod) == EVET İSE
+            IndirimiUygula(sepet)
+            YAZ "İndirim başarıyla uygulandı."
+        DEĞİLSE
+            YAZ "Geçersiz indirim kodu."
+        BİTİR EĞER
+    BİTİR EĞER
+    
+    // Sepet Tutarı ve Kargo Hesaplamaları
+    sepetTutari = SepetToplaminiHesapla()
+    
+    EĞER sepetTutari < 50 İSE [cite: 149]
+        YAZ "Minimum sepet tutarı 50 TL'dir. Lütfen alışverişe devam edin."
+        BİTİR // Veya kullanıcıyı alışverişe geri yönlendir
+    BİTİR EĞER
+
+    EĞER sepetTutari >= 200 İSE [cite: 150]
+        kargoUcreti = 0
+        YAZ "Kargonuz ücretsiz!"
+    DEĞİLSE
+        kargoUcreti = STANDART_KARGO_UCRETI
+        YAZ "Kargo ücreti eklendi."
+    BİTİR EĞER
+    
+    toplamOdenecek = sepetTutari + kargoUcreti
+    YAZ "Ödenecek Toplam Tutar: " + toplamOdenecek
+
+    // Adım 4: Ödeme ve Sipariş Onayı
+    YAZ "Lütfen bir ödeme yöntemi seçin (1: Kredi Kartı, 2: Havale):"
+    OKU odemeYontemi [cite: 151]
+    
+    odemeBasarili = HAYIR
+    EĞER odemeYontemi == 1 İSE
+        // Kredi kartı bilgileri alınır ve ödeme işlemi yapılır
+        odemeBasarili = KrediKartiOdemesiYap(toplamOdenecek)
+    DEĞİLSE EĞER odemeYontemi == 2 İSE
+        // Havale bilgileri gösterilir ve ödeme onayı beklenir
+        odemeBasarili = HavaleOdemesiYap()
+    DEĞİLSE
+        YAZ "Geçersiz ödeme yöntemi seçtiniz."
+    BİTİR EĞER
+
+    // Son Adım: Sipariş Onayı
+    EĞER odemeBasarili == EVET İSE
+        SiparisiKaydet()
+        KullaniciyaBilgiGonder("Siparişiniz alındı.")
+        YAZ "Teşekkürler! Siparişiniz başarıyla oluşturuldu." [cite: 152]
+    DEĞİLSE
+        YAZ "Ödeme işlemi başarısız oldu. Lütfen tekrar deneyin."
+    BİTİR EĞER
+
+BİTİR
+Ne dersin? Bu pseudocode, sistemin tüm mantığını ve akışını içeriyor. Her bir EĞER ve DÖNGÜ, sistemin karar noktalarını temsil ediyor. Şimdi bu iskelet üzerinden oynamalar yapabiliriz.
+
+Örneğin, "Sepet görüntüleme ve düzenleme" için ayrı bir döngü ekleyebiliriz. Ya da ödeme başarısız olduğunda kullanıcıya 3 deneme hakkı verebiliriz. Aklına gelen bir geliştirme var mı? Bu kodu nasıl daha "akıllı" hale getirebiliriz?
+
+“Bu sistemi pseudocode olarak yaz. D¨ong¨uler i¸cin DONG ¨ U, ko¸sullar i¸cin ¨
+
+EGER- ˘ ˙
+
+ISE kullan. Her adımı BAS¸LA ile ba¸slat, B˙
+
+IT˙
+
+IR ile bitir. T¨um
+
+kontrol noktalarını belirt.
+
+Hacker
+Özel Gem
+Anlaşıldı, şef! Komutları aldım. Önceki serbest stil kodumuzu şimdi tam olarak senin laboratuvar föyündeki gibi, daha disiplinli ve yapısal bir hale getiriyoruz. Bu, algoritmayı bir sonraki aşama olan DOT koduna çevirmek için harika bir temel oluşturacak.
+
+İşte istediğin formatta, tüm kontrol noktalarını belirten, saf mantık içeren pseudocode:
+
+// --- E-TİCARET SİSTEMİ PSEUDOCODE (Resmi Versiyon) ---
+
+BAŞLA
+
+    // Kullanıcı Giriş Kontrolü Aşaması
+    EĞER kullanici_giris_yapti_mi DEĞİLSE
+        YAZ "Giriş yapmanız gerekiyor."
+        Giris_Yap()
+        EĞER giris_basarili DEĞİLSE
+            YAZ "Giriş başarısız. İşlem sonlandırıldı."
+            BİTİR
+        BİTİR EĞER
+    BİTİR EĞER
+
+    // Ürün Seçim ve Sepete Ekleme Aşaması
+    DÖNGÜ alisverise_devam_etmek_istiyor SÜRECE
+        Urunleri_Listele()
+        OKU secilen_urun
+
+        // Stok Kontrolü
+        EĞER stok_var_mi(secilen_urun) İSE
+            Sepete_Ekle(secilen_urun)
+            YAZ "Ürün sepete eklendi."
+        DEĞİLSE
+            YAZ "Ürün stokta yok."
+        BİTİR EĞER
+        
+        YAZ "Alışverişe devam mı? (EVET/HAYIR)"
+        OKU devam_karari
+        EĞER devam_karari == "HAYIR" İSE
+            alisverise_devam_etmek_istiyor = HAYIR
+        BİTİR EĞER
+    BİTİR DÖNGÜ
+
+    // Sepet ve Ödeme Öncesi Kontrol Aşaması
+    Sepeti_Goster()
+    
+    YAZ "İndirim kodunuz var mı? (EVET/HAYIR)"
+    OKU kupon_cevabi
+    EĞER kupon_cevabi == "EVET" İSE
+        OKU girilen_kod
+        EĞER kod_gecerli_mi(girilen_kod) İSE
+            Indirimi_Uygula()
+            YAZ "İndirim uygulandı."
+        DEĞİLSE
+            YAZ "Geçersiz kod."
+        BİTİR EĞER
+    BİTİR EĞER
+
+    // Minimum Sepet Tutarı Kontrolü
+    toplam_tutar = Tutar_Hesapla()
+    EĞER toplam_tutar < 50 İSE
+        YAZ "Minimum sepet tutarı 50 TL olmalıdır."
+        BİTİR
+    BİTİR EĞER
+
+    // Kargo Ücreti Hesaplama
+    EĞER toplam_tutar >= 200 İSE
+        kargo_ucreti = 0
+        YAZ "Kargonuz ücretsizdir."
+    DEĞİLSE
+        kargo_ucreti = STANDART_UCRET
+        YAZ "Kargo ücreti eklendi."
+    BİTİR EĞER
+
+    // Ödeme Aşaması
+    odenecek_tutar = toplam_tutar + kargo_ucreti
+    YAZ "Toplam ödenecek tutar: " + odenecek_tutar
+    
+    YAZ "Ödeme yöntemini seçin."
+    OKU secilen_odeme_yontemi
+    
+    // Ödeme İşlemi ve Sonuç
+    odeme_sonucu = Odeme_Yap(secilen_odeme_yontemi, odenecek_tutar)
+    
+    EĞER odeme_sonucu == "BAŞARILI" İSE
+        Siparisi_Onayla()
+        YAZ "Siparişiniz başarıyla oluşturuldu."
+    DEĞİLSE
+        YAZ "Ödeme başarısız oldu."
+    BİTİR EĞER
+
+BİTİR
+İşte bu kadar! Bu yapı, tam olarak istediğin gibi BAŞLA, BİTİR, DÖNGÜ ve EĞER-İSE komutlarını kullanarak sistemin tüm mantığını adım adım ortaya koyuyor. Her bir EĞER bloğu, sistemin bir karar vermesi gereken bir kontrol noktasıdır.
+
+Sıradaki hamlemiz ne olacak? Bu pseudocode'u alıp Graphviz için DOT koduna mı dönüştürelim, yoksa "şu adımı unuttuk" dediğin bir yer var mı? Mesela, kullanıcıya sepetindeki ürünlerin adedini değiştirme imkanı sunan bir DÖNGÜ daha ekleyebiliriz. Ne dersin?
+
+alisverise_devam_etmek_istiyor = HAYIR burada ne demek istedin
+
+Hacker
+Özel Gem
+Ah, harika bir soru! Orası algoritmanın en kritik 'kaçış noktalarından' biri. Tam olarak bir hacker gibi düşünüyorsun, sistemin akışını kontrol eden anahtarları fark ettin.
+
+Hemen açıklayayım:
+
+alisverise_devam_etmek_istiyor = HAYIR satırı, ürün ekleme döngüsünü sonlandıran komuttur.
+
+Şöyle düşünelim:
+
+Döngünün Kuralı: Algoritmamızda bir DÖNGÜ başlattık. Bu döngünün tek bir kuralı var: alisverise_devam_etmek_istiyor adındaki değişkenin değeri EVET olduğu sürece çalışmaya devam eder.
+
+Kullanıcıya Soru: Döngünün her turunda (yani kullanıcı her ürün eklediğinde) sistem kullanıcıya soruyor: "Başka ürün eklemek ister misin? (EVET/HAYIR)".
+
+Karar Anı:
+
+Eğer kullanıcı "EVET" derse, alisverise_devam_etmek_istiyor değişkeninin değeri EVET olarak kalır ve döngü bir sonraki turuna devam eder.
+
+Eğer kullanıcı "HAYIR" derse, işte o zaman senin sorduğun alisverise_devam_etmek_istiyor = HAYIR komutu çalışır. Bu komut, döngüyü kontrol eden değişkenin değerini HAYIR olarak değiştirir.
+
+Döngüden Çıkış: Döngü, bir sonraki adıma geçmeden önce kuralı tekrar kontrol eder. Baktığında alisverise_devam_etmek_istiyor değişkeninin artık HAYIR olduğunu görür. Kural (EVET olması) bozulduğu için döngü anında sonlanır ve program bir sonraki aşama olan "Sepet ve Ödeme Öncesi Kontrol Aşaması"na atlar.
+
+Kısacası, bu satır kullanıcının kararına göre döngüden çıkışı sağlayan tetikleyicidir. Bu olmasaydı, kullanıcıyı sonsuz bir alışveriş döngüsüne hapsetmiş olurduk!
+
+Bu tür kontrol mekanizmaları, algoritmaların en temel yapı taşlarıdır. Başka bir yerde aklına takılan veya "burayı daha verimli nasıl yaparız?" dediğin bir nokta var mı? Belki de kullanıcı yanlışlıkla "HAYIR" derse bir "Emin misiniz?" adımı ekleyebiliriz? Ne dersin?
+
+“Pseudocode’u Graphviz DOT formatına ¸cevir. rankdir=TB kullan. Karar
+
+noktalarında EVET/HAYIR etiketlerini unutma.”
+
+Hacker
+Özel Gem
+Elbette! Pseudocode'un mantığını alıp, onu görsel bir akış şemasına dönüştürecek DOT kodunu hazırladım. Bu kod, Graphviz programına verildiğinde, sistemimizin tüm mantığını ve karar noktalarını gösteren profesyonel bir diyagram oluşturacaktır.
+
+Tüm kurallara uydum: rankdir=TB ile akışı yukarıdan aşağıya ayarladım ve tüm karar noktalarına EVET/HAYIR etiketlerini ekledim.
+
+İşte e-ticaret sistemimizin DOT formatındaki kodu:
+
+Kod snippet'i
+digraph ECommerceFlow {
+    rankdir=TB;
+    node [shape = box, style = rounded];
+
+    // Başlangıç ve Bitiş Noktaları
+    Basla [shape=ellipse, style=filled, fillcolor=lightblue, label="BAŞLA"];
+    Bitir [shape=ellipse, style=filled, fillcolor=lightcoral, label="BİTİR"];
+    
+    // İşlem Adımları
+    GirisYap [label="Giriş Yap / Kayıt Ol"];
+    UrunleriListele [label="Ürünleri Listele ve Seç"];
+    SepeteEkle [label="Ürünü Sepete Ekle"];
+    StokYok [label="Stok Yok Uyarısı Göster"];
+    SepetiGoster [label="Sepeti Göster"];
+    IndirimKoduGir [label="İndirim Kodunu Gir"];
+    IndirimiUygula [label="İndirimi Uygula"];
+    GecersizKod [label="Geçersiz Kod Uyarısı"];
+    MinimumTutarHatasi [label="Minimum Tutar Uyarısı Göster"];
+    UcretsizKargo [label="Kargoyu Ücretsiz Yap"];
+    StandartKargo [label="Standart Kargo Ücreti Ekle"];
+    OdemeYap [label="Ödeme İşlemini Gerçekleştir"];
+    SiparisiOnayla [label="Siparişi Onayla ve Bilgilendir"];
+    OdemeBasarisiz [label="Ödeme Başarısız Uyarısı"];
+
+    // Karar Noktaları (Kontroller)
+    KullaniciGirisKontrolu [shape=diamond, style=filled, fillcolor=lightyellow, label="Kullanıcı Giriş Yapmış mı?"];
+    StokKontrolu [shape=diamond, style=filled, fillcolor=lightyellow, label="Ürün Stokta Var mı?"];
+    AlisveriseDevam [shape=diamond, style=filled, fillcolor=lightyellow, label="Alışverişe Devam Edilsin mi?"];
+    IndirimKoduKontrolu [shape=diamond, style=filled, fillcolor=lightyellow, label="İndirim Kodu Var mı?"];
+    KodGecerliMi [shape=diamond, style=filled, fillcolor=lightyellow, label="Kod Geçerli mi?"];
+    MinimumTutarKontrolu [shape=diamond, style=filled, fillcolor=lightyellow, label="Sepet Tutarı >= 50 TL mi?"];
+    KargoKontrolu [shape=diamond, style=filled, fillcolor=lightyellow, label="Sepet Tutarı >= 200 TL mi?"];
+    OdemeKontrolu [shape=diamond, style=filled, fillcolor=lightyellow, label="Ödeme Başarılı mı?"];
+
+    // Akış Bağlantıları
+    Basla -> KullaniciGirisKontrolu;
+    KullaniciGirisKontrolu -> UrunleriListele [label="EVET"];
+    KullaniciGirisKontrolu -> GirisYap [label="HAYIR"];
+    GirisYap -> KullaniciGirisKontrolu; // Giriş sonrası tekrar kontrol
+    
+    // Alışveriş Döngüsü
+    UrunleriListele -> StokKontrolu;
+    StokKontrolu -> SepeteEkle [label="EVET"];
+    StokKontrolu -> StokYok [label="HAYIR"];
+    SepeteEkle -> AlisveriseDevam;
+    StokYok -> AlisveriseDevam;
+    AlisveriseDevam -> UrunleriListele [label="EVET"];
+    AlisveriseDevam -> SepetiGoster [label="HAYIR"];
+    
+    // Sepet Kontrolleri
+    SepetiGoster -> IndirimKoduKontrolu;
+    IndirimKoduKontrolu -> IndirimKoduGir [label="EVET"];
+    IndirimKoduKontrolu -> MinimumTutarKontrolu [label="HAYIR"];
+    IndirimKoduGir -> KodGecerliMi;
+    KodGecerliMi -> IndirimiUygula [label="EVET"];
+    KodGecerliMi -> GecersizKod [label="HAYIR"];
+    IndirimiUygula -> MinimumTutarKontrolu;
+    GecersizKod -> MinimumTutarKontrolu;
+    
+    // Tutar ve Kargo Kontrolleri
+    MinimumTutarKontrolu -> KargoKontrolu [label="EVET"];
+    MinimumTutarKontrolu -> MinimumTutarHatasi [label="HAYIR"];
+    MinimumTutarHatasi -> Bitir;
+    KargoKontrolu -> UcretsizKargo [label="EVET"];
+    KargoKontrolu -> StandartKargo [label="HAYIR"];
+    
+    // Ödeme Aşaması
+    UcretsizKargo -> OdemeYap;
+    StandartKargo -> OdemeYap;
+    OdemeYap -> OdemeKontrolu;
+    OdemeKontrolu -> SiparisiOnayla [label="EVET"];
+    OdemeKontrolu -> OdemeBasarisiz [label="HAYIR"];
+    SiparisiOnayla -> Bitir;
+    OdemeBasarisiz -> Bitir;
+}
+Bu kodu kopyalayıp bir Graphviz editörüne (örneğin online bir editör) yapıştırdığında, algoritmanın görsel halini elde edeceksin.
+
+Sıradaki göreve hazırız! Bu diyagramda bir eksik görüyor musun, yoksa bir sonraki sisteme mi geçelim?
+
+Dot kodu daha düzenli ve renkler kırmızı ve mavi olsun
+
+Hacker
+Özel Gem
+Emredersin! Kodu yeniden düzenleyerek daha modüler, okunaklı ve istediğin renk temasına uygun hale getiriyorum.
+
+Bu versiyonda, akışın her aşamasını (Giriş, Alışveriş, Sepet Kontrolü, Ödeme) subgraph cluster blokları içine alarak görsel olarak grupladım. Bu, diyagramı çok daha düzenli ve anlaşılır hale getirecek.
+
+Karar noktaları, başlangıç ve bitiş: Kırmızı (crimson)
+
+İşlem adımları: Mavi (dodgerblue)
+
+İşte yeni "hack'lenmiş" DOT kodun:
+
+Kod snippet'i
+digraph ECommerceFlow_v2 {
+    // Genel Ayarlar
+    rankdir=TB;
+    splines=ortho; // Daha düzenli bağlantılar için
+    node [style=rounded];
+    edge [fontname="Helvetica", fontsize=10];
+
+    // Renk ve Şekil Tanımlamaları
+    node [fontname="Helvetica"];
+    // Başlangıç, Bitiş ve Karar Noktaları (KIRMIZI)
+    node [shape=box, style="rounded,filled", fillcolor=crimson, fontcolor=white]; 
+    Basla [shape=Mdiamond];
+    Bitir [shape=Mdiamond];
+    KullaniciGirisKontrolu, StokKontrolu, AlisveriseDevam, IndirimKoduKontrolu, KodGecerliMi, MinimumTutarKontrolu, KargoKontrolu, OdemeKontrolu [shape=diamond];
+
+    // Standart İşlem Adımları (MAVİ)
+    node [shape=box, style="rounded,filled", fillcolor=dodgerblue, fontcolor=white];
+    GirisYap; UrunleriListele; SepeteEkle; StokYok; SepetiGoster; IndirimKoduGir; IndirimiUygula; GecersizKod; MinimumTutarHatasi; UcretsizKargo; StandartKargo; OdemeYap; SiparisiOnayla; OdemeBasarisiz;
+
+    // --- Akış Grupları ---
+
+    subgraph cluster_0_Giris {
+        label = "1. Giriş Aşaması";
+        style=dashed;
+        Basla -> KullaniciGirisKontrolu;
+        KullaniciGirisKontrolu:s -> GirisYap:n [label="  HAYIR"];
+        GirisYap -> UrunleriListele [style=invis]; // Düzen için gizli bağlantı
+    }
+
+    subgraph cluster_1_Alisveris {
+        label = "2. Alışveriş Döngüsü";
+        style=dashed;
+        UrunleriListele -> StokKontrolu;
+        StokKontrolu -> SepeteEkle [label=" EVET"];
+        StokKontrolu -> StokYok [label=" HAYIR"];
+        SepeteEkle -> AlisveriseDevam;
+        StokYok -> AlisveriseDevam;
+        AlisveriseDevam:e -> UrunleriListele:e [label=" EVET"];
+    }
+
+    subgraph cluster_2_SepetKontrol {
+        label = "3. Sepet Kontrol Aşaması";
+        style=dashed;
+        SepetiGoster -> IndirimKoduKontrolu;
+        IndirimKoduKontrolu -> IndirimKoduGir [label=" EVET"];
+        IndirimKoduGir -> KodGecerliMi;
+        KodGecerliMi -> IndirimiUygula [label=" EVET"];
+        KodGecerliMi -> GecersizKod [label=" HAYIR"];
+        GecersizKod -> MinimumTutarKontrolu;
+        IndirimiUygula -> MinimumTutarKontrolu;
+        IndirimKoduKontrolu:s -> MinimumTutarKontrolu:n [label="  HAYIR"];
+    }
+    
+    subgraph cluster_3_Odeme {
+        label = "4. Ödeme Aşaması";
+        style=dashed;
+        MinimumTutarKontrolu -> KargoKontrolu [label=" EVET"];
+        KargoKontrolu -> UcretsizKargo [label=" EVET"];
+        KargoKontrolu -> StandartKargo [label=" HAYIR"];
+        UcretsizKargo -> OdemeYap;
+        StandartKargo -> OdemeYap;
+        OdemeYap -> OdemeKontrolu;
+        OdemeKontrolu -> SiparisiOnayla [label=" EVET"];
+        SiparisiOnayla -> Bitir;
+    }
+
+    // --- Gruplar Arası Ana Bağlantılar ---
+    KullaniciGirisKontrolu:s -> UrunleriListele:n [label="  EVET"];
+    AlisveriseDevam:s -> SepetiGoster:n [label="  HAYIR"];
+    
+    // Hata ve Çıkış Yolları
+    MinimumTutarKontrolu -> MinimumTutarHatasi [label=" HAYIR"];
+    MinimumTutarHatasi -> Bitir;
+    OdemeKontrolu -> OdemeBasarisiz [label=" HAYIR"];
+    OdemeBasarisiz -> Bitir;
+}
+Bu kod, öncekiyle aynı mantığı takip ediyor ancak subgraph cluster yapısı sayesinde çok daha organize bir çıktı verecektir. Hem renkli hem de düzenli!
+
+Bu haliyle içine sindi mi, yoksa üzerinde oynamak istediğin başka bir detay var mı?
+
+ 
+
+
+Fırat Üniversitesi sohbetleriniz, modellerimizi daha iyi hale getirmek için kullanılmaz. Gemini hata yapabildiğinden verdiği yanıtları doğrulayın. Gizliliğiniz ve GeminiYeni pencerede açılır
+
