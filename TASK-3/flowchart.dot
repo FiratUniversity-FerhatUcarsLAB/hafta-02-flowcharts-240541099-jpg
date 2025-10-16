@@ -1,0 +1,57 @@
+digraph HastaneSistemi {
+    // Genel Ayarlar
+    graph [fontname="Helvetica", fontsize=12, splines=ortho];
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fillcolor="#E6F7FF"];
+    edge [fontname="Helvetica", fontsize=10];
+
+    // Başlangıç ve Kimlik Doğrulama
+    Basla [label="Başla", shape=ellipse, fillcolor="#C1E1C1"];
+    KimlikDogrulama [label="TC Kimlik No Girilir"];
+    DogrulamaKontrol [label="Kimlik Doğru mu?", shape=diamond, fillcolor="#FFDDC1"];
+    Cikis [label="Sistemden Çık", shape=ellipse, fillcolor="#FFC1C1"];
+    
+    // Ana Menü
+    AnaMenu [label="Ana Menü\n1- Randevu\n2- Tahlil\n3- Çıkış", shape=box, fillcolor="#D1C4E9"];
+
+    // Randevu Modülü
+    RandevuIslemleri [label="Randevu Modülü"];
+    PoliklinikSec [label="Poliklinik Seç"];
+    DoktorSec [label="Doktor Seç"];
+    SaatSec [label="Saat Seç"];
+    RandevuOnay [label="Randevuyu Onayla", shape=diamond, fillcolor="#FFDDC1"];
+    RandevuOlustur [label="Randevu Oluşturuldu", fillcolor="#C1E1C1"];
+    
+    // Tahlil Modülü
+    TahlilIslemleri [label="Tahlil Modülü"];
+    TahlilListele [label="Tahlilleri Listele ve Seç"];
+    DoktorMusaitMi [label="Doktor Müsait mi?", shape=diamond, fillcolor="#FFDDC1"];
+    GoruntuluGorusme [label="Görüntülü Görüşme Başlat", fillcolor="#C1E1C1"];
+    RandevuAlSoru [label="Sonuç Randevusu Alınsın mı?", shape=diamond, fillcolor="#FFDDC1"];
+
+    // Akış Bağlantıları
+    Basla -> KimlikDogrulama;
+    KimlikDogrulama -> DogrulamaKontrol;
+    DogrulamaKontrol -> AnaMenu [label="Evet"];
+    DogrulamaKontrol -> Cikis [label="Hayır"];
+    
+    AnaMenu -> RandevuIslemleri [label="1"];
+    AnaMenu -> TahlilIslemleri [label="2"];
+    AnaMenu -> Cikis [label="3"];
+    
+    // Randevu Akışı
+    RandevuIslemleri -> PoliklinikSec -> DoktorSec -> SaatSec -> RandevuOnay;
+    RandevuOnay -> RandevuOlustur [label="Evet"];
+    RandevuOnay -> AnaMenu [label="Hayır"];
+    RandevuOlustur -> AnaMenu;
+
+    // Tahlil Akışı
+    TahlilIslemleri -> TahlilListele -> DoktorMusaitMi;
+    DoktorMusaitMi -> GoruntuluGorusme [label="Evet"];
+    DoktorMusaitMi -> RandevuAlSoru [label="Hayır"];
+    GoruntuluGorusme -> AnaMenu;
+
+    // Tahlilden Randevuya Geçiş
+    RandevuAlSoru -> RandevuIslemleri [label="Evet\n(Sonuç Randevusu)"];
+    RandevuAlSoru -> AnaMenu [label="Hayır"];
+
+}
