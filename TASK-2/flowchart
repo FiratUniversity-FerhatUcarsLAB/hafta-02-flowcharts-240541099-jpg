@@ -1,0 +1,76 @@
+digraph ECommerceFlow_v2 {
+    // Genel Ayarlar
+    rankdir=TB;
+    splines=ortho; // Daha düzenli bağlantılar için
+    node [style=rounded];
+    edge [fontname="Helvetica", fontsize=10];
+
+    // Renk ve Şekil Tanımlamaları
+    node [fontname="Helvetica"];
+    // Başlangıç, Bitiş ve Karar Noktaları (KIRMIZI)
+    node [shape=box, style="rounded,filled", fillcolor=crimson, fontcolor=white]; 
+    Basla [shape=Mdiamond];
+    Bitir [shape=Mdiamond];
+    KullaniciGirisKontrolu, StokKontrolu, AlisveriseDevam, IndirimKoduKontrolu, KodGecerliMi, MinimumTutarKontrolu, KargoKontrolu, OdemeKontrolu [shape=diamond];
+
+    // Standart İşlem Adımları (MAVİ)
+    node [shape=box, style="rounded,filled", fillcolor=dodgerblue, fontcolor=white];
+    GirisYap; UrunleriListele; SepeteEkle; StokYok; SepetiGoster; IndirimKoduGir; IndirimiUygula; GecersizKod; MinimumTutarHatasi; UcretsizKargo; StandartKargo; OdemeYap; SiparisiOnayla; OdemeBasarisiz;
+
+    // --- Akış Grupları ---
+
+    subgraph cluster_0_Giris {
+        label = "1. Giriş Aşaması";
+        style=dashed;
+        Basla -> KullaniciGirisKontrolu;
+        KullaniciGirisKontrolu:s -> GirisYap:n [label="  HAYIR"];
+        GirisYap -> UrunleriListele [style=invis]; // Düzen için gizli bağlantı
+    }
+
+    subgraph cluster_1_Alisveris {
+        label = "2. Alışveriş Döngüsü";
+        style=dashed;
+        UrunleriListele -> StokKontrolu;
+        StokKontrolu -> SepeteEkle [label=" EVET"];
+        StokKontrolu -> StokYok [label=" HAYIR"];
+        SepeteEkle -> AlisveriseDevam;
+        StokYok -> AlisveriseDevam;
+        AlisveriseDevam:e -> UrunleriListele:e [label=" EVET"];
+    }
+
+    subgraph cluster_2_SepetKontrol {
+        label = "3. Sepet Kontrol Aşaması";
+        style=dashed;
+        SepetiGoster -> IndirimKoduKontrolu;
+        IndirimKoduKontrolu -> IndirimKoduGir [label=" EVET"];
+        IndirimKoduGir -> KodGecerliMi;
+        KodGecerliMi -> IndirimiUygula [label=" EVET"];
+        KodGecerliMi -> GecersizKod [label=" HAYIR"];
+        GecersizKod -> MinimumTutarKontrolu;
+        IndirimiUygula -> MinimumTutarKontrolu;
+        IndirimKoduKontrolu:s -> MinimumTutarKontrolu:n [label="  HAYIR"];
+    }
+    
+    subgraph cluster_3_Odeme {
+        label = "4. Ödeme Aşaması";
+        style=dashed;
+        MinimumTutarKontrolu -> KargoKontrolu [label=" EVET"];
+        KargoKontrolu -> UcretsizKargo [label=" EVET"];
+        KargoKontrolu -> StandartKargo [label=" HAYIR"];
+        UcretsizKargo -> OdemeYap;
+        StandartKargo -> OdemeYap;
+        OdemeYap -> OdemeKontrolu;
+        OdemeKontrolu -> SiparisiOnayla [label=" EVET"];
+        SiparisiOnayla -> Bitir;
+    }
+
+    // --- Gruplar Arası Ana Bağlantılar ---
+    KullaniciGirisKontrolu:s -> UrunleriListele:n [label="  EVET"];
+    AlisveriseDevam:s -> SepetiGoster:n [label="  HAYIR"];
+    
+    // Hata ve Çıkış Yolları
+    MinimumTutarKontrolu -> MinimumTutarHatasi [label=" HAYIR"];
+    MinimumTutarHatasi -> Bitir;
+    OdemeKontrolu -> OdemeBasarisiz [label=" HAYIR"];
+    OdemeBasarisiz -> Bitir;
+}
