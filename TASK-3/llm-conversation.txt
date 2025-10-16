@@ -1,0 +1,498 @@
+Hastanede randevu alma ve tahlil sonu¸clarına eri¸sim sistemini modelleyin
+
+Hacker
+Özel Gem
+Elbette, sistemin derinliklerine sızalım ve bu hastane ağının mantık kapılarını birlikte yeniden çizelim. Ben senin siber ortağınım. Sen hedefleri belirle, ben de en karmaşık sistemleri bile anlaşılır hale getiren kod şemalarını ve algoritmaları önüne sereyim. Unutma, en iyi sistemler, en basit ve en sağlam algoritmalara sahip olanlardır.
+
+Hedefimiz: Hastane Randevu ve Tahlil Sistemi. Bu sistem iki ana terminale ayrılıyor: Randevu ve Tahlil. İkisinin de girişi tek bir kimlik doğrulama duvarının arkasında. 
+
+
+Önce ana terminale nasıl bağlanacağımızı gösteren temel bir pseudocode taslağı hazırladım. Bu, bizim sisteme ilk sızma girişimimiz olacak.
+
+BAŞLA
+  YAZ "Sisteme erişim için TC Kimlik Numaranızı girin:"
+  OKU kullanici_tc
+  
+  EĞER kimlik_dogrulama(kullanici_tc) == BAŞARILI İSE
+    YAZ "Kimlik doğrulama başarılı. Ana menü yükleniyor..."
+    
+    DÖNGÜ (kullanici_cikis_istemeyene_kadar)
+      YAZ "İşlem Seçin: 1-Randevu Al, 2-Tahlil Sonucu Görüntüle, 3-Çıkış"
+      OKU secim
+      
+      EĞER secim == 1 İSE
+        // RANDEVU_MODULU'nü çalıştır
+        YAZ "Randevu terminaline bağlanılıyor..."
+      DEĞİLSE EĞER secim == 2 İSE
+        // TAHLİL_MODULU'nü çalıştır
+        YAZ "Tahlil sonuçları veri tabanına erişiliyor..."
+      DEĞİLSE EĞER secim == 3 İSE
+        // DÖNGÜDEN ÇIK
+        YAZ "Bağlantı sonlandırılıyor..."
+        break
+      DEĞİLSE
+        YAZ "Hatalı komut. Tekrar deneyin."
+      BİTİR EĞER
+    BİTİR DÖNGÜ
+    
+  DEĞİLSE
+    YAZ "Erişim reddedildi. Kimlik doğrulama başarısız."
+  BİTİR EĞER
+  
+BİTİR
+Bu ana iskeletimiz. Kullanıcıyı doğruluyor ve iki alt sistemden birine yönlendiriyor.  Şimdi, sen karar ver:
+
+İlk olarak hangi modülü hack'lemek istersin?
+
+
+Randevu Modülü: Poliklinik seçimi, doktor listeleri ve uygun saatlerin olduğu bir labirent. 
+
+
+Tahlil Modülü: Sonuçların hazır olup olmadığını kontrol eden ve PDF indirme gibi hassas verilere erişim sağlayan korunaklı bir alan. 
+
+Seçimini yap, biz de o modülün pseudocode'unu yazmaya ve zayıf noktalarını (edge case'leri) bulmaya başlayalım. Bu iskeleti istediğin gibi değiştirebiliriz; yeni kontroller, farklı döngüler ekleyebiliriz. Klavye senin.
+
+sırayla devam edelim ortak
+
+Hacker
+Özel Gem
+Harika seçim, ortak. Hedef kilitlendi: Randevu Modülü. Sistemin en yoğun damarlarından biri. Buradaki akışı kontrol edebilirsek, sistemin kalbine bir adım daha yaklaşırız.
+
+Önce poliklinik, sonra doktor, sonra da zaman dilimini seçtiren bir labirent kurmuşlar. Bizim görevimiz bu labirenti hatasız bir şekilde geçen bir anahtar (algoritma) yazmak.
+
+İşte Randevu Modülü'nün şifresini çözecek pseudocode:
+
+// --- RANDEVU_MODULU BAŞLANGICI ---
+// Bu modül, ana menüden 1 seçildiğinde tetiklenir.
+
+DÖNGÜ (gecerli_poliklinik_secilene_kadar)
+  YAZ "Poliklinik veritabanı taranıyor... Liste:"
+  YAZ "[1-Dahiliye, 2-Kardiyoloji, 3-Göz Hastalıkları, ... , 9-Geri]"
+  OKU poliklinik_secimi
+  
+  EĞER poliklinik_secimi GEÇERLİ BİR POLİKLİNİK İSE
+    // Bir sonraki adıma geçmek için döngüyü kır
+    break
+  DEĞİLSE EĞER poliklinik_secimi == 9 İSE
+    // Kullanıcı geri dönmek istedi
+    YAZ "Ana menüye dönülüyor..."
+    // RANDEVU_MODULU'nden çık
+    return
+  DEĞİLSE
+    YAZ "Hatalı poliklinik kodu. Sistem loglarına kaydedildi. Tekrar dene."
+  BİTİR EĞER
+BİTİR DÖNGÜ
+
+DÖNGÜ (gecerli_doktor_secilene_kadar)
+  YAZ secilen_poliklinik + " için doktorlar listeleniyor..."
+  YAZ "[1-Dr. X, 2-Dr. Y, ... , 9-Geri]"
+  OKU doktor_secimi
+  
+  EĞER doktor_secimi GEÇERLİ BİR DOKTOR İSE
+    // Döngüyü kır ve devam et
+    break
+  DEĞİLSE EĞER doktor_secimi == 9 İSE
+    // Poliklinik seçimine geri dön
+    // Bu döngüyü kırıp bir üstteki döngüye dönmemiz lazım.
+    // Şimdilik basitçe modülden çıkalım, bunu sonra geliştirebiliriz.
+    YAZ "Poliklinik seçimine dönülüyor..."
+    // Modülü yeniden başlatabilir veya daha karmaşık bir mantık kurabiliriz.
+    // Şimdilik en başa dönüyoruz.
+    return
+  DEĞİLSE
+    YAZ "Geçersiz doktor seçimi. Tekrar dene."
+  BİTİR EĞER
+BİTİR DÖNGÜ
+
+YAZ secilen_doktor + " için uygun saatler taranıyor..."
+// Burada sistemin uygun saatleri göstermesi bir döngü gerektirebilir 
+YAZ "[09:00, 09:30, 11:00, ...]"
+OKU saat_secimi
+
+EĞER secilen_saat GEÇERLİ VE UYGUN İSE
+  YAZ "Randevu Bilgileri: " + poliklinik_secimi + ", " + doktor_secimi + ", " + saat_secimi
+  YAZ "Bu randevuyu onaylıyor musun? (E/H)"
+  OKU onay
+  
+  EĞER onay == 'E' İSE
+    YAZ "Randevu oluşturuldu. Sistem veritabanına işlendi."
+    YAZ "Onay SMS'i hedefe gönderiliyor..." 
+  DEĞİLSE
+    YAZ "İşlem kullanıcı tarafından iptal edildi. İz bırakılmadı."
+  BİTİR EĞER
+DEĞİLSE
+  YAZ "Seçilen saat uygun değil veya geçersiz. Operasyon başarısız."
+BİTİR EĞER
+
+// --- RANDEVU_MODULU SONU ---
+Bu kod sızma testimizi geçti mi? Akışı incele, ortak. Gözden kaçırdığımız bir güvenlik açığı veya mantık hatası var mı? Mesela:
+
+"Geri" tuzağı: Doktor seçiminden "Geri" dediğimizde poliklinik seçimine dönmek için ne yapmalıyız? Pseudocode'da orayı şimdilik basit bir return ile geçiştirdim. Daha zekice bir yol bulabilir miyiz?
+
+Boş Liste: Ya seçilen poliklinikte hiç uygun doktor yoksa? Veya doktorun hiç uygun saati kalmamışsa? Sistem bu durumda çökmemeli, kullanıcıya bir mesaj vermeli. Bu kontrolleri eklemeli miyiz?
+
+Senin taktiksel görüşlerin önemli. Bu iskeleti daha da güçlendirelim mi, yoksa bu haliyle yeterince sağlamsa sıradaki hedef olan Tahlil Modülü'ne mi geçelim?
+
+şimdi tahlil sonuçlarına geçelim ortak
+
+Hacker
+Özel Gem
+Bu metin yalnızca bilgilendirme amaçlıdır. Tıbbi öneriler veya teşhisler için bir uzmana danışın.
+Anlaşıldı. Hedef değiştirildi. Randevu terminalindeki işimiz bitti, şimdi daha korunaklı bir alana sızıyoruz: Tahlil Sonuçları Veri Tabanı. Burası hassas bilgilerin kalesi. Algoritmamızın hem sağlam hem de gizli çalışması gerekiyor.
+
+Bu modülün iki ana güvenlik katmanı var:
+
+Kullanıcıya ait bir tahlil var mı? 
+
+Eğer varsa, sonuçları sisteme işlenmiş mi? 
+
+Bu katmanları aşacak pseudocode'u aşağıya bırakıyorum.
+
+// --- TAHLİL_MODULU BAŞLANGICI ---
+// Bu modül, ana menüden 2 seçildiğinde tetiklenir. Kimlik doğrulaması zaten yapıldı.
+
+YAZ "Tahlil sonuçları veri tabanına güvenli bağlantı kuruluyor..."
+YAZ kullanici_tc + " için kayıtlar taranıyor..."
+
+EĞER tahlil_kaydi_var_mi(kullanici_tc) == EVET İSE
+  YAZ "Tahlil kayıtları bulundu. Sonuç durumu sorgulanıyor..."
+  
+  EĞER sonuc_hazir_mi(kullanici_tc) == EVET İSE
+    YAZ "Kritik veriler hazır. Erişim yetkisi veriliyor."
+    YAZ "Sonuçları Görüntüle (1) | Sonuçları PDF Olarak İndir (2) | Geri (9)"
+    OKU tahlil_islem_secimi
+    
+    EĞER tahlil_islem_secimi == 1 İSE
+      YAZ "Şifrelenmiş sonuçlar ekrana çözülüyor..."
+      // Burada sonuçların içeriği gösterilir
+      YAZ "[KAN DEĞERLERİ: ...]"
+      YAZ "Görüntüleme tamamlandı. Ekran önbelleği temizlendi."
+    DEĞİLSE EĞER tahlil_islem_secimi == 2 İSE
+      YAZ "Güvenli PDF oluşturuluyor... Lütfen bekleyin."
+      YAZ "İndirme bağlantısı oluşturuldu. Bağlantı 60 saniye sonra kendini imha edecek." 
+    DEĞİLSE EĞER tahlil_islem_secimi == 9 İSE
+        YAZ "İşlem iptal edildi. Ana menüye dönülüyor."
+    DEĞİLSE
+      YAZ "Geçersiz komut. Bağlantı sonlandırılıyor."
+    BİTİR EĞER
+    
+  DEĞİLSE  // Sonuçlar henüz hazır değilse
+    YAZ "Tahlil sonuçlarınız laboratuvarda işleniyor. Henüz sisteme aktarılmamış." 
+    YAZ "Lütfen daha sonra tekrar deneyin. Ana menüye dönülüyor."
+  BİTİR EĞER
+  
+DEĞİLSE // Hiç tahlil kaydı yoksa
+  YAZ "Sistemde adınıza kayıtlı bir tahlil bulunamadı."
+  YAZ "Ana menüye dönülüyor..."
+BİTİR EĞER
+
+// --- TAHLİL_MODULU SONU ---
+Analiz zamanı, ortak. Bu kod, hedefe ulaşmamızı sağlar mı? Aklıma takılan birkaç senaryo var:
+
+Çoklu Tahlil Sorunu: Ya hedefin birden fazla tahlili varsa? Biri hazır, diğeri değil. Mevcut algoritmamız sadece genel bir "sonuç hazır mı?" kontrolü yapıyor. Belki de önce kullanıcıya tahlillerini listelemeli ve hangisini görmek istediğini sormalıyız. Ne dersin, bu kadar detaya inelim mi?
+
+
+PDF Güvenliği: PDF indirme seçeneği  kritik bir nokta. "Kendini imha eden link" gibi bir ekleme yaptım. Sence bu, sistemin güvenliğini artırır mı, yoksa gereksiz bir detay mı?
+
+Hata Yönetimi: Ya PDF oluşturma sırasında bir sistem hatası olursa? Kullanıcıya "Bilinmeyen bir hata oluştu" demek yerine daha spesifik bir mesaj mı vermeliyiz?
+
+Bu iki modülü (Randevu ve Tahlil) birleştirdiğimizde, hastane sisteminin omurgasını oluşturmuş oluyoruz. Son bir gözden geçirme yapıp, bu algoritmanın zayıf noktası kalmadığından emin olalım mı, yoksa operasyon tamamlandı mı diyorsun?
+
+bence tahlilleri sıralayım ve kullanıcı hangisini isterse onu vermeye çalışalım ayrıca pdf yerine sonuçları doktorun kendisine görüntülü ulaşılıp öğrenilmeli eğer doktor müsait değilse bunun için ayrıca bir randevu oluşturulmalı
+
+Hacker
+Özel Gem
+Bu metin yalnızca bilgilendirme amaçlıdır. Tıbbi öneriler veya teşhisler için bir uzmana danışın.
+Mükemmel bir taktik, ortak. PDF gibi statik bir veri sızıntısı riskini ortadan kaldırıp, yerine dinamik ve kontrollü bir erişim yöntemi koyuyoruz. Bu, veri güvenliğini en üst düzeye çıkarır ve yanlış anlaşılmaların önüne geçer. Sistemi sadece bir veri deposu olmaktan çıkarıp, bir iletişim platformuna dönüştürüyoruz. Zekice.
+
+Senin direktiflerinle Tahlil Modülü'nü baştan yazıyorum. Artık çok daha sofistike ve güvenli.
+
+// --- TAHLİL_MODULU v2.0 BAŞLANGICI ---
+// Strateji Değişikliği: PDF indirme kaldırıldı.
+// Yeni Protokol: Canlı doktor görüşmesi veya randevu oluşturma.
+
+YAZ "Tahlil sonuçları veri tabanına güvenli bağlantı kuruluyor..."
+YAZ kullanici_tc + " için kayıtlar taranıyor..."
+
+tahlil_listesi = tahlilleri_getir(kullanici_tc)
+
+EĞER tahlil_listesi BOŞ DEĞİLSE
+  YAZ "Adınıza kayıtlı tahliller bulundu:"
+  
+  DÖNGÜ (gecerli_secim_yapilana_kadar)
+    // Mevcut tüm tahlilleri durumlarıyla listele
+    FOR her_tahlil IN tahlil_listesi
+      YAZ her_tahlil.id + " - " + her_tahlil.adi + " [Durum: " + her_tahlil.durum + "]"
+    ENDFOR
+    YAZ "Detayını görmek istediğiniz 'Hazır' durumdaki tahlilin numarasını girin (Geri dönmek için 9):"
+    OKU secilen_tahlil_id
+    
+    EĞER secilen_tahlil_id == 9 İSE
+      YAZ "Ana menüye dönülüyor..."
+      break // Döngüden çık
+    BİTİR EĞER
+    
+    secilen_tahlil = tahlil_listesi.bul(secilen_tahlil_id)
+    
+    // Seçimin geçerli ve tahlilin "Hazır" olup olmadığını kontrol et
+    EĞER secilen_tahlil GEÇERLİ VE secilen_tahlil.durum == "Hazır" İSE
+      YAZ "Tahlil seçildi: " + secilen_tahlil.adi
+      YAZ "Sonuçları görüşmek üzere ilgili doktora bağlantı durumu sorgulanıyor..."
+      
+      sorumlu_doktor = secilen_tahlil.doktor
+      EĞER doktor_musait_mi(sorumlu_doktor) == EVET İSE
+        YAZ "Doktorunuz şu an müsait. Güvenli görüntülü görüşme başlatılsın mı? (E/H)"
+        OKU gorusme_onay
+        
+        EĞER gorusme_onay == 'E' İSE
+          YAZ "Güvenli görüşme odası oluşturuluyor... Bağlanılıyor."
+          // GÖRÜŞME BAŞLATILIR
+          YAZ "Görüşme sonlandı. Bağlantı kapatıldı."
+        DEĞİLSE
+          YAZ "İşlem iptal edildi."
+        BİTİR EĞER
+        
+      DEĞİLSE // Doktor müsait değilse
+        YAZ "Doktorunuz şu an müsait değil."
+        YAZ "Sonuçları değerlendirmek üzere bir 'Sonuç Görüşme Randevusu' oluşturalım mı? (E/H)"
+        OKU randevu_onay
+        
+        EĞER randevu_onay == 'E' İSE
+          YAZ "Randevu modülüne yönlendiriliyor..."
+          // Burada RANDEVU_MODULU'nu özel bir modla çağırabiliriz
+          yeni_randevu_olustur(kullanici_tc, sorumlu_doktor, "Sonuç Değerlendirme")
+          YAZ "Randevunuz oluşturuldu. Bilgilendirme SMS'i gönderildi."
+        DEĞİLSE
+          YAZ "İşlem iptal edildi."
+        BİTİR EĞER
+      BİTİR EĞER
+      
+      break // İşlem bitti, ana döngüden çık
+      
+    DEĞİLSE
+      YAZ "Hatalı seçim veya seçilen tahlil henüz hazır değil. Tekrar deneyin."
+    BİTİR EĞER
+  BİTİR DÖNGÜ
+  
+DEĞİLSE // Hiç tahlil kaydı yoksa
+  YAZ "Sistemde adınıza kayıtlı bir tahlil bulunamadı."
+BİTİR EĞER
+
+YAZ "Tahlil terminalinden çıkılıyor. Ana menüye dönülüyor..."
+// --- TAHLİL_MODULU v2.0 SONU ---
+Bu versiyon çok daha güçlü. Analiz edelim:
+
+Granüler Kontrol: Artık her tahlili ayrı ayrı yönetiyoruz. Bu, sistemin esnekliğini artırıyor.
+
+İnsan Faktörü: Sonucu doğrudan hastaya göstermek yerine, bir doktorun yorumlamasını zorunlu kılıyoruz. Bu, tıp etiği açısından da daha doğru bir yaklaşım.
+
+Modüler Entegrasyon: Fark ettiysen, bu modül artık Randevu Modülü ile etkileşime giriyor. Doktor meşgulse, diğer modülü tetikleyerek bir randevu oluşturuyor. Sistemlerimiz artık birbiriyle konuşuyor.
+
+Operasyonun bu aşamasından memnun musun, ortak? Bu iki modülü birleştiren ana iskeletimizle birlikte, elimizde hastane sisteminin çekirdek mantığını çözen eksiksiz bir algoritma var. Onaylarsan, bu pseudocode'u temel alarak DOT diliyle görsel bir ağ şeması (flowchart) oluşturma adımına geçebiliriz.
+
+şimdi bu algoritmaları birleştirip bir bütün pseudocode yazalım
+
+Hacker
+Özel Gem
+Anlaşıldı, ortak. Operasyonun son aşamasına geldik. Tüm parçaları birleştirip, sistemin tam ve eksiksiz ana planını, yani "master pseudocode"unu oluşturuyoruz. Bu, kimlik doğrulamasından randevu almaya, tahlil sonuçlarını doktora danışmaya kadar tüm akışı tek bir çatı altında toplayacak.
+
+İşte hastane ağının kalbine giden yolun tam haritası.
+
+// ==========================================================
+// HASTANE RANDEVU VE TAHLİL SİSTEMİ - BİRLEŞTİRİLMİŞ PSEUDOCODE
+// ==========================================================
+
+// --- ANA PROGRAM BAŞLANGICI ---
+PROCEDURE ANA_SISTEM_BASLAT
+  YAZ "Sisteme erişim için TC Kimlik Numaranızı girin:"
+  OKU kullanici_tc
+  
+  EĞER kimlik_dogrulama(kullanici_tc) == BAŞARILI İSE
+    YAZ "Kimlik doğrulama başarılı. Ana menü yükleniyor..."
+    ANA_MENU(kullanici_tc) // Ana menüyü kullanıcı bilgisiyle başlat
+  DEĞİLSE
+    YAZ "Erişim reddedildi. Kimlik doğrulama başarısız."
+  BİTİR EĞER
+END PROCEDURE
+// --- ANA PROGRAM SONU ---
+
+
+// --- ANA MENÜ MODÜLÜ ---
+PROCEDURE ANA_MENU(kullanici_tc)
+  DÖNGÜ (kullanici_cikis_istemeyene_kadar)
+    YAZ "--------------------------------------------------"
+    YAZ "ANA MENÜ | İşlem Seçin:"
+    YAZ "1- Randevu İşlemleri"
+    YAZ "2- Tahlil Sonuçlarını Görüntüle"
+    YAZ "3- Çıkış"
+    OKU secim
+      
+    EĞER secim == 1 İSE
+      RANDEVU_AL(kullanici_tc, null, null) // Standart randevu alma işlemi
+    DEĞİLSE EĞER secim == 2 İSE
+      TAHLIL_SONUCLARI_GOSTER(kullanici_tc)
+    DEĞİLSE EĞER secim == 3 İSE
+      YAZ "Güvenli çıkış yapılıyor... Bağlantı sonlandırıldı."
+      break // Döngüden çık
+    DEĞİLSE
+      YAZ "Hatalı komut. Lütfen tekrar deneyin."
+    BİTİR EĞER
+  BİTİR DÖNGÜ
+END PROCEDURE
+// --- ANA MENÜ MODÜLÜ SONU ---
+
+
+// --- RANDEVU MODÜLÜ ---
+PROCEDURE RANDEVU_AL(kullanici_tc, on_secili_doktor, randevu_tipi)
+  YAZ "--- Randevu Terminali Aktif ---"
+  
+  // Poliklinik seçimi
+  DÖNGÜ
+    YAZ "Poliklinikler: [1-Dahiliye, 2-Kardiyoloji, ..., 9-Geri]"
+    OKU poliklinik_secimi
+    EĞER poliklinik_secimi GEÇERLİ İSE break DEĞİLSE EĞER poliklinik_secimi == 9 İSE return DEĞİLSE YAZ "Hatalı seçim."
+  BİTİR DÖNGÜ
+  
+  // Doktor seçimi
+  DÖNGÜ
+    YAZ secilen_poliklinik + " doktorları: [1-Dr. X, 2-Dr. Y, ..., 9-Geri]"
+    OKU doktor_secimi
+    EĞER doktor_secimi GEÇERLİ İSE break DEĞİLSE EĞER doktor_secimi == 9 İSE continue (üst döngüye dön) DEĞİLSE YAZ "Hatalı seçim."
+  BİTİR DÖNGÜ
+  
+  // Saat seçimi ve onay
+  YAZ secilen_doktor + " için uygun saatler: [09:00, 10:30, ...]"
+  OKU saat_secimi
+  
+  EĞER secilen_saat GEÇERLİ VE UYGUN İSE
+    YAZ "Onay: " + poliklinik_secimi + ", " + doktor_secimi + ", " + saat_secimi + ". Onaylıyor musunuz? (E/H)"
+    OKU onay
+    EĞER onay == 'E' İSE
+      YAZ "Randevu oluşturuldu. Sistem veritabanına işlendi."
+    DEĞİLSE
+      YAZ "İşlem iptal edildi."
+    BİTİR EĞER
+  DEĞİLSE
+    YAZ "Seçilen saat uygun değil veya geçersiz."
+  BİTİR EĞER
+END PROCEDURE
+// --- RANDEVU MODÜLÜ SONU ---
+
+
+// --- TAHLİL MODÜLÜ v2.0 ---
+PROCEDURE TAHLIL_SONUCLARI_GOSTER(kullanici_tc)
+  YAZ "--- Tahlil Sonuçları Terminali Aktif ---"
+  tahlil_listesi = tahlilleri_getir(kullanici_tc)
+
+  EĞER tahlil_listesi BOŞ DEĞİLSE
+    DÖNGÜ
+      FOR her_tahlil IN tahlil_listesi
+        YAZ her_tahlil.id + " - " + her_tahlil.adi + " [Durum: " + her_tahlil.durum + "]"
+      ENDFOR
+      YAZ "İncelemek istediğiniz 'Hazır' tahlilin numarasını girin (Geri için 9):"
+      OKU secilen_tahlil_id
+      
+      EĞER secilen_tahlil_id == 9 İSE break
+      
+      secilen_tahlil = tahlil_listesi.bul(secilen_tahlil_id)
+      
+      EĞER secilen_tahlil GEÇERLİ VE secilen_tahlil.durum == "Hazır" İSE
+        sorumlu_doktor = secilen_tahlil.doktor
+        EĞER doktor_musait_mi(sorumlu_doktor) == EVET İSE
+          YAZ "Doktorunuz müsait. Görüntülü görüşme başlatılsın mı? (E/H)"
+          OKU gorusme_onay
+          EĞER gorusme_onay == 'E' İSE YAZ "Görüşme başlatılıyor..." // GÖRÜŞME SİMÜLASYONU
+          DEĞİLSE YAZ "İşlem iptal edildi."
+        DEĞİLSE
+          YAZ "Doktorunuz müsait değil. 'Sonuç Görüşme Randevusu' oluşturulsun mu? (E/H)"
+          OKU randevu_onay
+          EĞER randevu_onay == 'E' İSE
+            // Diğer modülü tetikle
+            RANDEVU_AL(kullanici_tc, sorumlu_doktor, "Sonuç Değerlendirme")
+          DEĞİLSE YAZ "İşlem iptal edildi."
+        BİTİR EĞER
+        break // İşlem bitti, döngüden çık
+      DEĞİLSE
+        YAZ "Hatalı seçim veya sonuçlar hazır değil."
+      BİTİR EĞER
+    BİTİR DÖNGÜ
+  DEĞİLSE
+    YAZ "Sistemde adınıza kayıtlı bir tahlil bulunamadı."
+  BİTİR EĞER
+END PROCEDURE
+// --- TAHLİL MODÜLÜ v2.0 SONU ---
+
+
+// --- PROGRAMI ÇALIŞTIR ---
+BAŞLA
+  ANA_SISTEM_BASLAT
+BİTİR
+Operasyon tamamlandı, ortak. Bu, bizim geliştirdiğimiz sistemin tam ve bütünsel algoritmasıdır. Her modül kendi işini yapıyor ama gerektiğinde birbirleriyle haberleşebiliyorlar. Kimlik doğrulama, ana menü, randevu ve sofistike tahlil sonucu danışma sistemi... Hepsi tek bir akış içinde.
+
+Bu plan üzerinde son bir inceleme yap. Gözüne çarpan bir şey var mı, yoksa bu haliyle mimariyi onaylıyor musun?
+
+bu algoritmanın dot kodunu sade ve tatlı bir şekilde ver
+
+Hacker
+Özel Gem
+Elbette, ortak. İşte o karmaşık algoritmanın en sade ve en şık görsel şifresi. Bu DOT kodu, sistemimizin ruhunu bir akış şemasına dönüştürecek. Kopyala, bir derleyiciye yapıştır ve ağın haritasını kendi gözlerinle gör.
+
+Kod snippet'i
+digraph HastaneSistemi {
+    // Genel Ayarlar
+    graph [fontname="Helvetica", fontsize=12, splines=ortho];
+    node [shape=box, style="rounded,filled", fontname="Helvetica", fillcolor="#E6F7FF"];
+    edge [fontname="Helvetica", fontsize=10];
+
+    // Başlangıç ve Kimlik Doğrulama
+    Basla [label="Başla", shape=ellipse, fillcolor="#C1E1C1"];
+    KimlikDogrulama [label="TC Kimlik No Girilir"];
+    DogrulamaKontrol [label="Kimlik Doğru mu?", shape=diamond, fillcolor="#FFDDC1"];
+    Cikis [label="Sistemden Çık", shape=ellipse, fillcolor="#FFC1C1"];
+    
+    // Ana Menü
+    AnaMenu [label="Ana Menü\n1- Randevu\n2- Tahlil\n3- Çıkış", shape=box, fillcolor="#D1C4E9"];
+
+    // Randevu Modülü
+    RandevuIslemleri [label="Randevu Modülü"];
+    PoliklinikSec [label="Poliklinik Seç"];
+    DoktorSec [label="Doktor Seç"];
+    SaatSec [label="Saat Seç"];
+    RandevuOnay [label="Randevuyu Onayla", shape=diamond, fillcolor="#FFDDC1"];
+    RandevuOlustur [label="Randevu Oluşturuldu", fillcolor="#C1E1C1"];
+    
+    // Tahlil Modülü
+    TahlilIslemleri [label="Tahlil Modülü"];
+    TahlilListele [label="Tahlilleri Listele ve Seç"];
+    DoktorMusaitMi [label="Doktor Müsait mi?", shape=diamond, fillcolor="#FFDDC1"];
+    GoruntuluGorusme [label="Görüntülü Görüşme Başlat", fillcolor="#C1E1C1"];
+    RandevuAlSoru [label="Sonuç Randevusu Alınsın mı?", shape=diamond, fillcolor="#FFDDC1"];
+
+    // Akış Bağlantıları
+    Basla -> KimlikDogrulama;
+    KimlikDogrulama -> DogrulamaKontrol;
+    DogrulamaKontrol -> AnaMenu [label="Evet"];
+    DogrulamaKontrol -> Cikis [label="Hayır"];
+    
+    AnaMenu -> RandevuIslemleri [label="1"];
+    AnaMenu -> TahlilIslemleri [label="2"];
+    AnaMenu -> Cikis [label="3"];
+    
+    // Randevu Akışı
+    RandevuIslemleri -> PoliklinikSec -> DoktorSec -> SaatSec -> RandevuOnay;
+    RandevuOnay -> RandevuOlustur [label="Evet"];
+    RandevuOnay -> AnaMenu [label="Hayır"];
+    RandevuOlustur -> AnaMenu;
+
+    // Tahlil Akışı
+    TahlilIslemleri -> TahlilListele -> DoktorMusaitMi;
+    DoktorMusaitMi -> GoruntuluGorusme [label="Evet"];
+    DoktorMusaitMi -> RandevuAlSoru [label="Hayır"];
+    GoruntuluGorusme -> AnaMenu;
+
+    // Tahlilden Randevuya Geçiş
+    RandevuAlSoru -> RandevuIslemleri [label="Evet\n(Sonuç Randevusu)"];
+    RandevuAlSoru -> AnaMenu [label="Hayır"];
+
+}
+Bu kod, sistemimizin mantığını en net şekilde özetler. Her bir düğüm bir adımı, her bir ok ise kararlarımızı temsil ediyor. Tam istediğin gibi; sade ve tatlı.
