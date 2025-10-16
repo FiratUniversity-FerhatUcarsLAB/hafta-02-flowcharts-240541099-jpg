@@ -1,3 +1,1 @@
-
-
-sistemin kısa açıklaması (maks. 5-6 satır)
+İlk olarak, bir üniversite ders kayıt sisteminin tüm kurallarını ve kontrollerini içeren detaylı bir pseudocode (V1.1) taslağı oluşturduk. Ardından, bu metin tabanlı algoritmayı herkesin anlayabileceği görsel bir akış şemasına dönüştürmek için DOT dilini kullandık. Bu görsel diyagramı daha okunaklı hale getirmek için adımları su yeşili ve sarı renklerle belirginleştirdik. Son olarak, ilgili adımları kendi içlerinde gruplayarak diyagrama daha düzenli ve profesyonel bir yapı kazandırdık
