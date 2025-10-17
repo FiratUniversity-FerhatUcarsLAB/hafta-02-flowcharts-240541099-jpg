@@ -1,0 +1,57 @@
+digraph AkilliEvGuvenlikSistemi {
+    // --- Genel Ayarlar ---
+    // Diyagramın genel görünümünü, yönünü ve yazı tipini ayarla.
+    // 'TB' yukarıdan aşağıya akışı, 'ortho' keskin köşeli okları sağlar.
+    graph [rankdir=TB, splines=ortho, fontname="Helvetica", label="Akıllı Ev Güvenlik Sistemi Akış Diyagramı", fontsize=16];
+    node [shape=box, style="filled", fontname="Helvetica", fontsize=10];
+    edge [fontname="Helvetica", fontsize=9];
+
+    // --- Düğüm (Node) Tanımlamaları ---
+    // Her bir işlem, karar veya başlangıç/bitiş noktası bir düğümdür.
+    // Renkler, işlevleri gruplamak için kullanılmıştır.
+
+    // Başlangıç ve Döngü Noktaları (Yeşil)
+    start [label="BAŞLA", shape=ellipse, fillcolor="#D4EFDF"];
+    
+    // Standart İşlemler (Açık Mavi)
+    init [label="Sistem Başlatılıyor\n(Değişkenler Ayarlanıyor)", fillcolor="#D6EAF8"];
+    gather_data [label="Adım 1: İstihbarat Toplama\n(İç Sensörler + Dış Veriler)", fillcolor="#D6EAF8"];
+    wait [label="3 Saniye Bekle", shape=box, fillcolor="#EAECEE"];
+
+    // Karar Noktaları (Açık Sarı)
+    check_critical [label="SEVİYE 1:\nKRİTİK TEHDİT VAR MI?", shape=diamond, fillcolor="#FEF9E7"];
+    check_precaution [label="SEVİYE 2:\nÖNLEM GEREKLİ Mİ?", shape=diamond, fillcolor="#FEF9E7"];
+    check_warning [label="SEVİYE 3:\nUYARI GEREKLİ Mİ?", shape=diamond, fillcolor="#FEF9E7"];
+    
+    // Aksiyon Noktaları (Tehdit seviyesine göre renkli)
+    action_critical [label="KRİTİK EYLEM\n- Alarmı ve Kamerayı Aktive Et\n- ACİL Bildirim Gönder (Linkli)", shape=box, fillcolor="#FADBD8"];
+    action_precaution [label="ÖNLEM EYLEMİ\n- Ana Şalteri Kapat\n- BİLGİ Bildirimi Gönder", shape=box, fillcolor="#FDEBD0"];
+    action_warning [label="UYARI EYLEMİ\n- TAVSİYE Bildirimi Gönder", shape=box, fillcolor="#EBF5FB"];
+
+    // --- Akış Yönü (Oklar) ---
+    // Düğümleri mantıksal sıraya göre birbirine bağla.
+    
+    // Başlangıç Akışı
+    start -> init;
+    init -> gather_data;
+    
+    // Karar Ağacı Akışı
+    gather_data -> check_critical;
+    check_critical -> action_critical [label=" Evet"];
+    check_critical -> check_precaution [label=" Hayır"];
+    
+    check_precaution -> action_precaution [label=" Evet"];
+    check_precaution -> check_warning [label=" Hayır"];
+    
+    check_warning -> action_warning [label=" Evet"];
+    check_warning -> wait [label=" Hayır"];
+    
+    // Aksiyonlardan Sonra Döngüye Dönüş
+    action_critical -> wait;
+    action_precaution -> wait;
+    action_warning -> wait;
+    
+    // *** İSTENEN SONSuz DÖNGÜ GÖSTERİMİ ***
+    // 'wait' düğümünden sonra sistemin başına dönmesini sağlayan geri ok.
+    wait -> gather_data [label=" Sürekli", style=dashed, color=blue, fontcolor=blue, dir=back];
+}
